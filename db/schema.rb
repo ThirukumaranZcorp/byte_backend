@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_27_093645) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_30_092228) do
   create_table "users", charset: "utf8mb3", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -21,6 +21,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_27_093645) do
     t.datetime "updated_at", null: false
     t.string "name"
     t.integer "role"
+    t.string "bank_name"
+    t.string "account_name"
+    t.string "account_number"
+    t.string "swift_code"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

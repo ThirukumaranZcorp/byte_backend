@@ -59,15 +59,38 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # def after_inactive_sign_up_path_for(resource)
   #   super(resource)
   # end
-  respond_to :json
+  # respond_to :json
 
+  # def create
+  #   build_resource(sign_up_params)
+
+  #   if resource.save
+  #     render json: {
+  #       message: "User registered successfully",
+  #       user: resource
+  #     }, status: :created
+  #   else
+  #     render json: {
+  #       message: "Registration failed",
+  #       errors: resource.errors.full_messages
+  #     }, status: :unprocessable_entity
+  #   end
+  # end
+
+ respond_to :json
+
+  before_action :configure_sign_up_params, only: [:create]
+
+  # POST /users
   def create
     build_resource(sign_up_params)
 
     if resource.save
+      token = Warden::JWTAuth::UserEncoder.new.call(resource, :user, nil).first
       render json: {
         message: "User registered successfully",
-        user: resource
+        user: resource,
+        token: token
       }, status: :created
     else
       render json: {
@@ -76,4 +99,20 @@ class Users::RegistrationsController < Devise::RegistrationsController
       }, status: :unprocessable_entity
     end
   end
+
+  protected
+
+  # Permit extra fields for sign up
+  def configure_sign_up_params
+    devise_parameter_sanitizer.permit(:sign_up, keys: [
+      :name, 
+      :bank_name, 
+      :account_name, 
+      :account_number, 
+      :swift_code
+    ])
+  end
+
+
+
 end

@@ -22,6 +22,7 @@ gem "solid_cable"
 gem 'mysql2'
 gem "rack-cors"
 
+gem 'devise-jwt'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
