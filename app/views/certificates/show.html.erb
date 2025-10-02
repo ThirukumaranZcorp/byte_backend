@@ -1,0 +1,193 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Profit Sharing Certificate - <%= @participant.certificate_id || @participant.id %></title>
+
+  <!-- Inline styles so wkhtmltopdf renders exactly -->
+  <style>
+    /* page */
+    @page { margin: 40px 50px; }
+    body { font-family: "Times New Roman", Georgia, serif; font-size: 12pt; color: #111; line-height: 1.45; }
+
+    /* header */
+    .header { text-align: left; margin-bottom: 20px; }
+    .issuer-contact { font-size: 10pt; color: #333; }
+    .company { font-weight: 700; margin-top: 6px; }
+
+    /* title block */
+    .title { text-align: center; margin: 20px 0; }
+    .title h1 { font-size: 22pt; margin: 0; letter-spacing: 1px; }
+    .title .sub { margin-top: 6px; font-size: 11pt; font-weight: 600; }
+
+    /* main content */
+    .content { margin-top: 12px; }
+    .section { margin-bottom: 14px; }
+    .section h3 { margin: 8px 0; font-size: 13pt; text-decoration: underline; }
+
+    /* two-column rows for Contribution/Term */
+    .row { display:flex; gap: 20px; }
+    .col { flex: 1; }
+
+    /* signature block */
+    .signature { margin-top: 30px; display:flex; justify-content:space-between; align-items:center; }
+    .sig-block { width: 48%; text-align: left; }
+    .sig-line { margin-top: 24px; border-top: 1px solid #000; width: 80%; padding-top:6px; }
+
+    /* footer */
+    .footer { margin-top: 40px; font-size: 9pt; color: #666; text-align: right; }
+    .page-number { position: fixed; bottom: 20px; right: 50px; font-size: 9pt; color: #666; }
+
+    /* small tweaks for pdf */
+    .muted { color: #444; font-size: 11pt; }
+    .bold { font-weight: 700; }
+    .center { text-align: center; }
+  </style>
+</head>
+<body>
+  <!-- Header: issuer contact -->
+  <div class="header">
+    <div class="issuer-contact">
+      <div>info@zcorp.space</div>
+      <div>Unit 9G, One Corporate Place, Maple Grove, Antero Soriano Highway,</div>
+      <div>Cavite 4107, Philippines</div>
+    </div>
+  </div>
+
+  <!-- Title -->
+  <div class="title">
+    <h1>PROFIT SHARING CERTIFICATE</h1>
+    <div class="sub">
+      Issued by: <span class="bold">Bytes Exchange – Z Corp.</span>
+      &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+      Date of Issuance: <span class="bold"><%= @participant.issuance_date&.strftime("%d %B %Y") rescue @participant.issuance_date %></span>
+    </div>
+  </div>
+
+  <div class="content">
+    <p>This is to certify that <strong><%= @participant.full_name.presence || @participant.fullName || "—" %></strong> (“Participant”) has provided a capital contribution to <strong>Bytes Exchange – Z Corp.</strong> under the following terms and conditions:</p>
+
+    <!-- 1. Contribution -->
+    <div class="section">
+      <h3>1. Contribution</h3>
+      <p class="muted">
+        The Participant has provided the sum of
+        <strong>
+          <%= begin
+                # formatted numeric amount (e.g. £2,000.00); adjust unit display if needed
+                unit = (@participant.currency.presence || @participant.currency || "GBP")
+                number_to_currency(@participant.contribution_amount || @participant.contribution_amount, unit: (unit == "GBP" ? "£" : "#{unit} ") )
+              rescue
+                @participant.contribution_amount || "—"
+              end %>
+        </strong>
+        (<%= @participant.currency || "GBP" %>) (“Contribution”), which shall be utilized for trading and exchange-related activities under the management of the Company.
+      </p>
+    </div>
+
+    <!-- 2. Term -->
+    <div class="section">
+      <h3>2. Term</h3>
+      <p class="muted">
+        This Certificate shall be valid from
+        <strong><%= @participant.start_date&.strftime("%d %B %Y") rescue @participant.start_date %></strong>
+        until
+        <strong><%= @participant.end_date&.strftime("%d %B %Y") rescue @participant.end_date %></strong>
+        (“Profit Term”).
+      </p>
+    </div>
+
+    <!-- 3. Profit Sharing -->
+    <div class="section">
+      <h3>3. Profit Sharing</h3>
+      <p class="muted">
+        The Participant shall be entitled to receive a share of the trading profits generated during the Profit Term as described in the Investment Chart and Payment Schedule.
+        Payment Schedule: Distributions shall be made on the <strong>4th day of each month</strong>, beginning <strong><%= (@participant.start_date + 30.days).strftime("%d %B %Y") rescue "" %></strong> and continuing until <strong><%= @participant.end_date&.strftime("%d %B %Y") rescue @participant.end_date %></strong>.
+      </p>
+    </div>
+
+    <!-- 4. Trader's Fee -->
+    <div class="section">
+      <h3>4. Trader’s Fee</h3>
+      <p class="muted">A trader’s fee of three percent (3%) of trading proceeds shall be deducted prior to the calculation and distribution of profit shares.</p>
+    </div>
+
+    <!-- 5. Return of Contribution & Renewal -->
+    <div class="section">
+      <h3>5. Return of Contribution & Renewal</h3>
+      <p class="muted">
+        Within thirty (30) days after the conclusion of the Profit Term, the Participant shall have the option to withdraw the original Contribution in full or reinvest the Contribution into a new profit-sharing term subject to a renewal fee of five percent (5%).
+      </p>
+    </div>
+
+    <!-- 6. Banking/Crypto Details -->
+    <div class="section">
+      <h3>6. Banking / Cryptocurrency Details</h3>
+      <div>
+        <p><strong>Method:</strong> <%= @participant.method || @participant[:method] || "Bank" %></p>
+        <p><strong>Bank Name / Crypto Type:</strong> <%= @participant.bank_name_or_crypto_type.presence || @participant.bank_name_or_crypto || "____________________" %></p>
+        <p><strong>Account Name:</strong> <%= @participant.account_name.presence || "____________________" %></p>
+        <p><strong>Account Number / Wallet address:</strong> <%= @participant.account_number_or_wallet.presence || @participant.account_number_or_wallet || "____________________" %></p>
+        <p><strong>SWIFT Code / Blockchain Protocol:</strong> <%= @participant.swift_or_protocol.presence || @participant.swift_or_protocol || "____________________" %></p>
+      </div>
+    </div>
+
+    <!-- 7. Currency Conversion & Settlement -->
+    <div class="section">
+      <h3>7. Currency Conversion & Settlement</h3>
+      <p class="muted">
+        All profit share payments and the return of Contribution shall be calculated in Pounds Sterling (GBP).
+        If settlement is selected in USDT or other stablecoins, the Company shall use prevailing exchange rates at the time of transfer. Any intermediary fees or blockchain network fees shall be borne by the Participant.
+      </p>
+    </div>
+
+    <!-- 8. Smart Contract -->
+    <div class="section">
+      <h3>8. Smart Contract</h3>
+      <p class="muted">
+        This Certificate represents a private contractual arrangement between the Participant and the Company and does not represent a public solicitation or regulated financial product under applicable law.
+      </p>
+    </div>
+
+    <!-- 9. Risk Disclosure -->
+    <div class="section">
+      <h3>9. Risk Disclosure</h3>
+      <p class="muted">
+        The Participant acknowledges and accepts that all trading and investment activities involve inherent risks. The Participant confirms they understand the risks and accept responsibility for their decision to participate.
+      </p>
+    </div>
+
+    <!-- Acknowledgement & Signature -->
+    <div class="section">
+      <h3>Acknowledgement & Acceptance</h3>
+      <p class="muted">By signing below, the Participant acknowledges and accepts the terms of this Profit Sharing Certificate.</p>
+
+      <div class="signature">
+        <div class="sig-block">
+          <div class="bold">For Participant</div>
+          <div>Name: <strong><%= @participant.full_name.presence || @participant.typed_name || "____________________" %></strong></div>
+          <div class="sig-line">Signature</div>
+          <div>Date: <%= @participant.date_signed&.strftime("%d %B %Y") rescue @participant.date_signed || "________________" %></div>
+        </div>
+
+        <div class="sig-block">
+          <div class="bold">Issued by</div>
+          <div>Bytes Exchange – Z Corp.</div>
+          <div class="sig-line">Authorized Signature</div>
+          <div>Ref: <%= @participant.certificate_id || "RM08042025V1.0rev" %></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- footer -->
+    <div class="footer">
+      <div>2 | Page &nbsp;&nbsp;&nbsp; BYTES EXCHANGE – RM08042025V1.0rev.</div>
+    </div>
+
+    <!-- optional page number -->
+    <div class="page-number">
+      Page <span class="pageNumber"></span>
+    </div>
+  </div>
+</body>
+</html>

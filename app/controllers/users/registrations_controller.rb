@@ -105,14 +105,43 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # Permit extra fields for sign up
   def configure_sign_up_params
     devise_parameter_sanitizer.permit(:sign_up, keys: [
-      :name, 
-      :bank_name, 
-      :account_name, 
-      :account_number, 
-      :swift_code
+      :name,          # your internal field
+      :fullName,      # if frontend sends fullName
+      :email,         # make sure email is permitted
+      :phone_number,
+      :residential_address,
+      :contribution_amount,
+      :currency,
+      :issuance_date,
+      :start_date,
+      :end_date,
+      :method,
+      :bank_name_or_crypto_type,
+      :account_name,
+      :account_number_or_wallet,
+      :swift_or_protocol,
+      :terms_accepted,
+      :risk_disclosure_accepted,
+      :renewal_fee_accepted,
+      :typed_name,
+      :date_signed,
+      :password, :password_confirmation
     ])
   end
 
+  def sign_up_params
+    params.require(:sign_up).permit(
+      :fullName, :email, :password, :password_confirmation,
+      :phone_number, :residential_address, :contribution_amount,
+      :currency, :issuance_date, :start_date, :end_date,
+      :method, :bank_name_or_crypto_type, :account_name,
+      :account_number_or_wallet, :swift_or_protocol,
+      :terms_accepted, :risk_disclosure_accepted,
+      :renewal_fee_accepted, :typed_name, :date_signed
+    ).tap do |whitelisted|
+      whitelisted[:name] = whitelisted.delete(:fullName) if whitelisted[:fullName]
+    end
+  end
 
 
 end

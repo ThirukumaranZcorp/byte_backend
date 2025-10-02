@@ -25,7 +25,14 @@ Rails.application.routes.draw do
   # root "posts#index"
   namespace :api do
     namespace :v1 do
-      resources :payment_details, only: [:create, :index, :show]
+      # resources :payment_details, only: [:create, :index, :show]
+      # resource :certificate, only: [:show]
+      # resources :certificates, only: [:show]
+      # resources :certificates, only: [:show], defaults: { format: :pdf }
+      resources :certificates, only: [:show]
+      # get "/test_pdf", to: "certificates#test_pdf"
+      # get "certificate/:id", to: "certificates#test_pdf"
+      get 'certificate/:id', to: 'certificates#test_pdf', defaults: { format: :pdf }
     end
   end
 

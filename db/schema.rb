@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_30_092228) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_27_093645) do
   create_table "users", charset: "utf8mb3", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -20,11 +20,26 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_30_092228) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "name"
-    t.integer "role"
-    t.string "bank_name"
+    t.string "phone_number"
+    t.string "residential_address"
+    t.decimal "contribution_amount", precision: 12, scale: 2
+    t.string "currency", default: "GBP"
+    t.date "issuance_date"
+    t.date "start_date"
+    t.date "end_date"
+    t.string "method"
+    t.string "bank_name_or_crypto_type"
     t.string "account_name"
-    t.string "account_number"
-    t.string "swift_code"
+    t.string "account_number_or_wallet"
+    t.string "swift_or_protocol"
+    t.boolean "terms_accepted", default: false
+    t.boolean "risk_disclosure_accepted", default: false
+    t.boolean "renewal_fee_accepted", default: false
+    t.string "typed_name"
+    t.date "date_signed"
+    t.string "uploaded_signature_url"
+    t.string "certificate_id"
+    t.integer "role", default: 0
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
