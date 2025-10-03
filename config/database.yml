@@ -83,3 +83,18 @@ production:
     database: Bytes_production
     username: courier_user
     password: Courier@123
+default: &default
+  adapter: mysql2
+  encoding: utf8
+  pool: 5
+  host: localhost
+  username: rails_user
+  password: rails@123!!
+
+development:
+  <<: *default
+  database: Bytes_development
+
+test:
+  <<: *default
+  database: Bytes_test
