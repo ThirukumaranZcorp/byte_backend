@@ -40,24 +40,81 @@
 #     database: storage/production_cable.sqlite3
 #     migrations_paths: db/cable_migrate
 
+#default: &default
+#  adapter: mysql2
+#  encoding: utf8
+#  pool: 5
+#  host: 127.0.0.1
+#  socket: /tmp/mysqld.sock
+#  username: root
+#  password: root
+
+#development:
+#  <<: *default
+#  database: Bytes_dev  
+
+#test:
+ # <<: *default
+ # database: Bytes_test          
+ # username: root
+ # password: root
+
+#production:
+ # primary:
+   # <<: *default
+   # database: Bytes_production
+   # username: courier_user
+   # password: Courier@123
+
+  #cable:
+  #  <<: *default
+  #  database: Bytes_production
+  #  username: courier_user
+  #  password: Courier@123
+
+ # queue:
+   # <<: *default
+   # database: Bytes_production
+   # username: courier_user
+  #  password: Courier@123
+
+ # cache:
+   # <<: *default
+   # database: Bytes_production
+   # username: courier_user
+   # password: Courier@123
+#default: &default
+  #adapter: mysql2
+  #encoding: utf8
+  #pool: 5
+  #host: localhost
+  #username: rails_user
+ # password: rails@123!!
+
+#development:
+  #<<: *default
+ # database: Bytes_development
+
+#test:
+  #<<: *default
+  #database: Bytes_test
 default: &default
   adapter: mysql2
   encoding: utf8
   pool: 5
   host: 127.0.0.1
-  socket: /tmp/mysqld.sock
-  username: root
-  password: root
 
 development:
   <<: *default
-  database: Bytes_development  
+  database: Bytes_development
+  username: rails_user
+  password: rails@123!!
 
 test:
   <<: *default
-  database: Bytes_test          
-  username: root
-  password: root
+  database: Bytes_test
+  username: rails_user
+  password: rails@123!!
 
 production:
   primary:
@@ -83,18 +140,3 @@ production:
     database: Bytes_production
     username: courier_user
     password: Courier@123
-default: &default
-  adapter: mysql2
-  encoding: utf8
-  pool: 5
-  host: localhost
-  username: rails_user
-  password: rails@123!!
-
-development:
-  <<: *default
-  database: Bytes_development
-
-test:
-  <<: *default
-  database: Bytes_test

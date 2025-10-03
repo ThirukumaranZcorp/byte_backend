@@ -1,4 +1,4 @@
-class AddColumnToUser < ActiveRecord::Migration[8.0]
+class AddMissingColumnsToUsers < ActiveRecord::Migration[8.0]
   def change
     add_column :users, :phone_number, :string
     add_column :users, :residential_address, :string
@@ -20,5 +20,6 @@ class AddColumnToUser < ActiveRecord::Migration[8.0]
     add_column :users, :uploaded_signature_url, :string
     add_column :users, :certificate_id, :string
     add_column :users, :role, :integer, default: 0
+    add_column :users, :name, :string
   end
 end
