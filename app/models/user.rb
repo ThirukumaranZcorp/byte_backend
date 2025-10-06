@@ -10,11 +10,12 @@ class User < ApplicationRecord
          jwt_revocation_strategy: Devise::JWT::RevocationStrategies::Null
          
   after_create :assign_role
+  has_many :transactions, dependent: :destroy
 
   private
 
-  def assign_role
-    # Update column directly to avoid triggering callbacks again
-    update_column(:role, 2) # 2 = whatever your default role is
-  end
+    def assign_role
+      # Update column directly to avoid triggering callbacks again
+      update_column(:role, 2) if role.blank? # 2 = whatever your default role is
+    end
 end

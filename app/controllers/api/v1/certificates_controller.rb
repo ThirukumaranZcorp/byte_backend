@@ -1,28 +1,9 @@
 class Api::V1::CertificatesController < ApplicationController
+    # before_action :authorize_request!, except: [:show, :test_pdf]
+    # skip_before_action :authorize_request!, only: [:show, :test_pdf]
+    skip_before_action :authorize_request, only: [:show, :test_pdf]
     # If your API controllers skip layout/rendering, make sure to enable views here.
     include ActionController::MimeResponds
-
-    # def show
-    #     @participant = User.find(params[:id])
-
-    #     respond_to do |format|
-    #         format.html do
-    #         render pdf: "certificate_#{@participant.certificate_id || @participant.id}",
-    #                 template: "certificates/show.html.erb",
-    #                 layout: "pdf",
-    #                 disposition: "attachment",
-    #                 page_size: "A4"
-    #         end
-    #         format.pdf do
-    #         render pdf: "certificate_#{@participant.certificate_id || @participant.id}",
-    #                 template: "certificates/show.html.erb",
-    #                 layout: "pdf",
-    #                 disposition: "attachment",
-    #                 page_size: "A4"
-    #         end
-    #         format.json { render json: { message: "Certificate available", participant_id: @participant.id } }
-    #     end
-    # end
 
 
     def show
@@ -35,6 +16,37 @@ class Api::V1::CertificatesController < ApplicationController
             format.any  { head :not_acceptable } # fallback for unknown formats
         end
     end
+
+
+    def show_details
+    user_details = User.where.not(role: 1)
+    render json: user_details, status: :ok
+    end
+
+
+    # def user_details
+    #     puts current_user.id.inspect
+    #     puts "000000000000000--------------00000000000------"
+    #     user_detail = User.find(current_user.id)
+    #     puts user_detail.transactions.inspect
+    #     puts "000000000000000--------------00000000000------"
+
+    #     render json: user_detail, status: :ok
+    # end
+
+    def user_details
+        user_detail = User.find(current_user.id)
+        render json: user_detail.as_json(
+            only: [:id, :full_name, :currency, :contribution_amount, :contribution_amount],  # pick user fields
+            include: {
+            transactions: {
+                only: [:notes, :month, :confirmation_number, :status] # pick transaction fields
+            }
+            }
+        ), status: :ok
+    end
+
+
 
     # def test_pdf
     #     pdf_html = <<-HTML

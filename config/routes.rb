@@ -33,6 +33,12 @@ Rails.application.routes.draw do
       # get "/test_pdf", to: "certificates#test_pdf"
       # get "certificate/:id", to: "certificates#test_pdf"
       get 'certificate/:id', to: 'certificates#test_pdf', defaults: { format: :pdf }
+      get '/show_details', to: 'certificates#show_details'
+      get '/user_details', to: 'certificates#user_details'
+      resources :transactions, only: [:show]
+      post "upload_transactions/:id", to: "transactions#upload"
+      get 'profile', to: 'profiles#show'
+      patch 'profile', to: 'profiles#update'
     end
   end
 

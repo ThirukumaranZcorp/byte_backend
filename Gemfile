@@ -24,6 +24,7 @@ gem "rack-cors"
 
 gem 'devise-jwt'
 
+gem "csv"
 
 gem "wicked_pdf"
 # gem "wkhtmltopdf-binary"
