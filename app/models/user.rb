@@ -11,7 +11,7 @@ class User < ApplicationRecord
          
   after_create :assign_role
   has_many :transactions, dependent: :destroy
-
+  has_many :notifications, dependent: :destroy
   private
 
     def assign_role

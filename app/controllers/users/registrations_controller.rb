@@ -2,6 +2,7 @@
 
 class Users::RegistrationsController < Devise::RegistrationsController
   skip_before_action :authorize_request, only: [:create]
+  before_action :authorize_request, only: [:change_password]
   # before_action :configure_account_update_params, only: [:update]
 
   # GET /resource/sign_up
@@ -99,6 +100,40 @@ class Users::RegistrationsController < Devise::RegistrationsController
       }, status: :unprocessable_entity
     end
   end
+
+
+
+
+  def change_password
+    user = current_user
+    puts "enter the function ==============="
+    puts params.inspect
+    puts user.inspect
+    puts "=============================="
+
+    # Use valid_password? instead of authenticate
+    if user.valid_password?(params[:current_password])
+      if params[:new_password].present?
+        user.password = params[:new_password]
+        if user.save
+          render json: { message: "Password changed successfully" }, status: :ok
+        else
+          render json: { error: user.errors.full_messages }, status: :unprocessable_entity
+        end
+      else
+        render json: { error: "New password cannot be blank" }, status: :unprocessable_entity
+      end
+    else
+      render json: { error: "Current password is incorrect" }, status: :unauthorized
+    end
+  end
+
+
+
+
+
+
+
 
   protected
 

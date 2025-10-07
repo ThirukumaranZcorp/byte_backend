@@ -40,7 +40,7 @@ class Api::V1::CertificatesController < ApplicationController
             only: [:id, :full_name, :currency, :contribution_amount, :contribution_amount],  # pick user fields
             include: {
             transactions: {
-                only: [:notes, :month, :confirmation_number, :status] # pick transaction fields
+                only: [:notes, :month, :confirmation_number, :status, :bank ,:total, :to_account ,:service ,:fee ,:currency] # pick transaction fields
             }
             }
         ), status: :ok

@@ -9,7 +9,9 @@ Rails.application.routes.draw do
   devise_for :users,
     controllers: {
       registrations: 'users/registrations',
-      sessions: 'users/sessions'
+      sessions: 'users/sessions',
+
+      
     }
 
 
@@ -20,7 +22,9 @@ Rails.application.routes.draw do
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
-
+  devise_scope :user do
+    patch '/users/change_password', to: 'users/registrations#change_password'
+  end
   # Defines the root path route ("/")
   # root "posts#index"
   namespace :api do
@@ -39,6 +43,13 @@ Rails.application.routes.draw do
       post "upload_transactions/:id", to: "transactions#upload"
       get 'profile', to: 'profiles#show'
       patch 'profile', to: 'profiles#update'
+
+      resources :notifications, only: [:index, :create] do
+        member do
+          patch :read, to: 'notifications#mark_as_read'
+        end
+      end
+
     end
   end
 
