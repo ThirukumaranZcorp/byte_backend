@@ -73,6 +73,11 @@ class Api::V1::CertificatesController < ApplicationController
 
     def test_pdf
     @participant = User.find(params[:id]) # Example dynamic object
+    @issuance_date     = @participant.issuance_date || Date.today
+    @distribution_date = @issuance_date + 1.day
+    @start_date        = @distribution_date.next_month
+    @end_date          = @start_date.next_year
+
 
     # Helper for formatted currency
     def format_currency(amount, currency = "GBP")
@@ -166,9 +171,9 @@ class Api::V1::CertificatesController < ApplicationController
             <h3><strong>2. Term</strong></h3>
             <p class="muted">
                 This Certificate shall be valid from
-                <strong>#{@participant.start_date&.strftime("%d %B %Y") || "—"}</strong>
+                <strong>#{@start_date.strftime("%d %B %Y") || "—"}</strong>
                 until
-                <strong>#{@participant.end_date&.strftime("%d %B %Y") || "—"}</strong>
+                <strong>#{@end_date.strftime("%d %B %Y") || "—"}</strong>
                 (“Profit Term”).
             </p>
             </div>
@@ -177,7 +182,7 @@ class Api::V1::CertificatesController < ApplicationController
             <h3>3. Profit Sharing and Payment Schedule</h3>
             <p class="muted">
                 The Participant shall be entitled to receive a share of the trading profits generated during the Profit Term as described in the Investment Chart and Payment Schedule.
-                Payment Schedule: Distributions shall be made on the <strong>4th day of each month</strong>, beginning <strong>#{(@participant.start_date&.+(30))&.strftime("%d %B %Y") rescue "—"}</strong> and continuing until <strong>#{@participant.end_date&.strftime("%d %B %Y") || "—"}</strong>.
+                Payment Schedule: Distributions shall be made on the <strong>4th day of each month</strong>, beginning <strong>#{@start_date.strftime("%d %B %Y") rescue "—"}</strong> and continuing until <strong>#{@end_date.strftime("%d %B %Y") || "—"}</strong>.
             </p>
             <ol >
             <li><strong>Profit Sharing:</strong> The Investment Chart reflects the Company’s assessment of profit share ranges and corresponding risk levels at a given point in time. These ranges and risk levels are subject to revision without prior notice in order to align with market conditions, strategic adjustments, and portfolio management considerations.</li>
