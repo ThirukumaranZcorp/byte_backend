@@ -182,7 +182,7 @@ class Api::V1::CertificatesController < ApplicationController
             <h3>3. Profit Sharing and Payment Schedule</h3>
             <p class="muted">
                 The Participant shall be entitled to receive a share of the trading profits generated during the Profit Term as described in the Investment Chart and Payment Schedule.
-                Payment Schedule: Distributions shall be made on the <strong>4th day of each month</strong>, beginning <strong>#{@start_date.strftime("%d %B %Y") rescue "—"}</strong> and continuing until <strong>#{@end_date.strftime("%d %B %Y") || "—"}</strong>.
+                Payment Schedule: Distributions shall be made on the <strong>9th day of each month</strong>, beginning <strong>#{@start_date.strftime("%d %B %Y") rescue "—"}</strong> and continuing until <strong>#{@end_date.strftime("%d %B %Y") || "—"}</strong>.
             </p>
             <ol >
             <li><strong>Profit Sharing:</strong> The Investment Chart reflects the Company’s assessment of profit share ranges and corresponding risk levels at a given point in time. These ranges and risk levels are subject to revision without prior notice in order to align with market conditions, strategic adjustments, and portfolio management considerations.</li>
@@ -268,8 +268,11 @@ class Api::V1::CertificatesController < ApplicationController
             </div>
 
             <div class="footer">
-            <div>BYTES EXCHANGE – RM08042025V1.0rev.</div>
+                <div>
+                    BYTES EXCHANGE – RM#{Date.today.strftime("%d%m%Y")}V1.0rev.
+                </div>
             </div>
+
         </div>
         </body>
         </html>

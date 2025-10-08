@@ -83,6 +83,25 @@ class Users::RegistrationsController < Devise::RegistrationsController
   before_action :configure_sign_up_params, only: [:create]
 
   # POST /users
+  # def create
+  #   build_resource(sign_up_params)
+
+  #   if resource.save
+  #     token = Warden::JWTAuth::UserEncoder.new.call(resource, :user, nil).first
+  #     render json: {
+  #       message: "User registered successfully",
+  #       user: resource,
+  #       token: token
+  #     }, status: :created
+  #   else
+  #     render json: {
+  #       message: "Registration failed",
+  #       errors: resource.errors.full_messages
+  #     }, status: :unprocessable_entity
+  #   end
+  # end
+
+
   def create
     build_resource(sign_up_params)
 
@@ -99,18 +118,19 @@ class Users::RegistrationsController < Devise::RegistrationsController
         errors: resource.errors.full_messages
       }, status: :unprocessable_entity
     end
+  rescue ActiveRecord::RecordNotUnique
+    render json: {
+      message: "Registration failed",
+      errors: ["Email already exists"]
+    }, status: :unprocessable_entity
   end
+
 
 
 
 
   def change_password
     user = current_user
-    puts "enter the function ==============="
-    puts params.inspect
-    puts user.inspect
-    puts "=============================="
-
     # Use valid_password? instead of authenticate
     if user.valid_password?(params[:current_password])
       if params[:new_password].present?
