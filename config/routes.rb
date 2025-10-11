@@ -50,6 +50,13 @@ Rails.application.routes.draw do
         end
       end
 
+      resources :admin_notifications, only: [:index] do
+        member do
+          patch :read, to: 'admin_notifications#mark_as_read'
+          patch :update_payout_day, to: 'admin_notifications#upcoming_payouts'
+        end
+      end
+
     end
   end
 

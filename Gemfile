@@ -28,6 +28,8 @@ gem "csv"
 
 gem "wicked_pdf"
 # gem "wkhtmltopdf-binary"
+gem 'whenever', require: false
+
 
 
 # Reduces boot times through caching; required in config/boot.rb

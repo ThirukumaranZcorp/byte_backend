@@ -12,6 +12,21 @@ class User < ApplicationRecord
   after_create :assign_role
   has_many :transactions, dependent: :destroy
   has_many :notifications, dependent: :destroy
+
+  def payout_date_for_month(date = Date.today)
+    Date.new(date.year, date.month, payout_day)
+  rescue
+    nil
+  end
+
+  def notify_admin?
+    payout_date = payout_date_for_month
+    return false unless payout_date
+    days_left = (payout_date - Date.today).to_i
+    days_left == 2 # Notify 48 hours (2 days) before
+  end
+
+  
   private
 
     def assign_role

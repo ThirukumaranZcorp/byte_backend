@@ -106,6 +106,12 @@ class Users::RegistrationsController < Devise::RegistrationsController
     build_resource(sign_up_params)
 
     if resource.save
+      # Create notification for admin when new user registers
+      AdminNotification.create!(
+        title: "New User Registered",
+        message: "A new user '#{resource.name}' (#{resource.email}) has just registered on #{Time.current.strftime('%d %B %Y, %I:%M %p')}."
+      )
+
       token = Warden::JWTAuth::UserEncoder.new.call(resource, :user, nil).first
       render json: {
         message: "User registered successfully",
