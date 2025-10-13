@@ -44,6 +44,10 @@ Rails.application.routes.draw do
       get 'profile', to: 'profiles#show'
       patch 'profile', to: 'profiles#update'
 
+      post 'change_trader_fee', to: 'profiles#change_the_fees'
+
+      get 'get_change_trader_fee', to: 'profiles#get_change_trader_fee'
+
       resources :notifications, only: [:index, :create] do
         member do
           patch :read, to: 'notifications#mark_as_read'

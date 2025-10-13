@@ -1,0 +1,2 @@
+class Dashbord < ApplicationRecord
+end

@@ -14,6 +14,26 @@ class Api::V1::ProfilesController < ApplicationController
     end
   end
 
+  def get_change_trader_fee
+    dashboard = Dashbord.find(1)
+    render json: dashboard
+  end
+
+  def change_the_fees
+    fee = params[:fee].to_f
+    puts "Fee param: #{fee}"
+
+    dashboard = Dashbord.find(1) # or Dashbord if that's your actual model
+    puts "----------------ddd------------"
+    puts dashboard.inspect
+    if dashboard.update(fee: fee)
+      render json: { status: "success", fee: dashboard.fee }
+    else
+      render json: { status: "error", errors: dashboard.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
+
   private
 
   def profile_params

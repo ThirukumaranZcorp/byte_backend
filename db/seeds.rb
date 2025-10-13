@@ -7,9 +7,12 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
-User.find_or_create_by!(email: "admin@yopmail.com") do |user|
-    user.password = "byte@1234"
-    user.password_confirmation = "byte@1234"
-    user.role = 1
-    user.name = "byteAdmin"
-end
+# User.find_or_create_by!(email: "admin@yopmail.com") do |user|
+#     user.password = "byte@1234"
+#     user.password_confirmation = "byte@1234"
+#     user.role = 1
+#     user.name = "byteAdmin"
+# end
+
+# Dashbord.find_or_create_by!(fee: 3)
+Dashbord.find_or_create_by!(fee: 3.0)
