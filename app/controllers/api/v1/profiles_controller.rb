@@ -34,6 +34,40 @@ class Api::V1::ProfilesController < ApplicationController
   end
 
 
+
+  def change_trader_max
+    max = params[:max]
+
+    puts "Fee param: -------  #{max}"
+
+    dashboard = Dashbord.find(1) # or Dashbord if that's your actual model
+    puts "----------------ddd------------"
+    puts dashboard.inspect
+    if dashboard.update(max: max)
+      render json: { status: "success", max: dashboard.max }
+    else
+      render json: { status: "error", errors: dashboard.errors.full_messages }, status: :unprocessable_entity
+    end
+
+  end
+
+  def change_trader_min
+    min = params[:min]
+
+    puts "Fee param: ------------- #{min}"
+
+    dashboard = Dashbord.find(1) # or Dashbord if that's your actual model
+    puts "----------------ddd------------"
+    puts dashboard.inspect
+    if dashboard.update(min: min)
+      render json: { status: "success", min: dashboard.min }
+    else
+      render json: { status: "error", errors: dashboard.errors.full_messages }, status: :unprocessable_entity
+    end
+
+  end
+
+
   private
 
   def profile_params

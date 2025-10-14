@@ -48,6 +48,11 @@ Rails.application.routes.draw do
 
       get 'get_change_trader_fee', to: 'profiles#get_change_trader_fee'
 
+      post 'change_trader_min' , to: 'profiles#change_trader_min'
+
+      post 'change_trader_max' , to: 'profiles#change_trader_max'
+
+
       resources :notifications, only: [:index, :create] do
         member do
           patch :read, to: 'notifications#mark_as_read'
