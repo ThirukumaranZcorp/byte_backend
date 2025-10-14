@@ -40,7 +40,7 @@ class Api::V1::CertificatesController < ApplicationController
             only: [:id, :full_name, :currency, :contribution_amount, :contribution_amount],  # pick user fields
             include: {
             transactions: {
-                only: [:notes, :month, :confirmation_number, :status, :bank ,:total, :to_account ,:service ,:fee ,:currency] # pick transaction fields
+                only: [:notes, :month, :confirmation_number, :status, :bank ,:total, :to_account ,:service ,:fee ,:currency, :month_count, :from_account ,:profit_amount] # pick transaction fields
             }
             }
         ), status: :ok
@@ -147,7 +147,7 @@ class Api::V1::CertificatesController < ApplicationController
         </div>
         <div class="section" >
             <div class="block-right">
-                <p><strong>Issued by: </strong><span class="bold">Bytes Exchange&#8482;</span></p>
+                <p><strong>Issued by: </strong><span class="bold">Bytes Exchange&#8482; - Z Corp.</span></p>
                 <p><strong>Date of Issuance:</strong> 
                 <span class="bold">#{@participant.issuance_date&.strftime("%d %B %Y") || Date.today.strftime("%d %B %Y")}</span>
                 </p>
@@ -156,7 +156,7 @@ class Api::V1::CertificatesController < ApplicationController
 
 
         <div class="content">
-            <p>This is to certify that <strong>#{@participant.name || "—"}</strong> (“Participant”) has provided a capital contribution to <strong>Bytes Exchange&#8482;</strong> under the following terms and conditions:</p>
+            <p>This is to certify that <strong>#{@participant.name || "—"}</strong> (“Participant”) has provided a capital contribution to <strong>Bytes Exchange&#8482;- Z Corp.</strong> under the following terms and conditions:</p>
 
             <div class="section" >
             <h3>1. Contribution</h3>
@@ -182,11 +182,13 @@ class Api::V1::CertificatesController < ApplicationController
             <h3>3. Profit Sharing and Payment Schedule</h3>
             <p class="muted">
                 The Participant shall be entitled to receive a share of the trading profits generated during the Profit Term as described in the Investment Chart and Payment Schedule.
-                Payment Schedule: Distributions shall be made on the <strong>9th day of each month</strong>, beginning <strong>#{@start_date.strftime("%d %B %Y") rescue "—"}</strong> and continuing until <strong>#{@end_date.strftime("%d %B %Y") || "—"}</strong>.
+
             </p>
             <ol >
             <li><strong>Profit Sharing:</strong> The Investment Chart reflects the Company’s assessment of profit share ranges and corresponding risk levels at a given point in time. These ranges and risk levels are subject to revision without prior notice in order to align with market conditions, strategic adjustments, and portfolio management considerations.</li>
-            <li><strong>Payment Schedule:</strong> Distributions shall be processed within twenty-four (24) hours or the next business day following the receipt of funds. Thereafter, subsequent distributions shall follow a recurring one-month cycle, with profits made available to the Participant on a monthly basis for the duration of the Profit Term.</li>
+            <li><strong>Payment Schedule:</strong> Funds shall be processed, that is, recorded and reflected in the system within twenty-four (24) hours or the next business day following the receipt of funds.
+            The first distribution of profits shall take place after one (1) full month from the date of fund processing.
+            Thereafter, distributions shall follow a recurring one-month cycle, with profits made available to the Participant on a monthly basis for the duration of the Profit Term.</li>
             </ol>
 
 

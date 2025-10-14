@@ -59,3 +59,5 @@ group :development, :test do
 end
 
 gem "devise", "~> 4.9"
+
+gem "roo", "~> 3.0"

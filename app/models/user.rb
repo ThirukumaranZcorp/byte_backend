@@ -12,6 +12,7 @@ class User < ApplicationRecord
   after_create :assign_role
   has_many :transactions, dependent: :destroy
   has_many :notifications, dependent: :destroy
+  # after_create :send_welcome_email
 
   def payout_date_for_month(date = Date.today)
     Date.new(date.year, date.month, payout_day)
@@ -32,5 +33,13 @@ class User < ApplicationRecord
     def assign_role
       # Update column directly to avoid triggering callbacks again
       update_column(:role, 2) if role.blank? # 2 = whatever your default role is
+      # Add one day to issuance_date
+      newday = self.issuance_date + 1.day
+      # Update payout_day correctly
+      update_column(:payout_day, newday.day)
+    end
+
+    def send_welcome_email
+      UserMailer.welcome_email(self).deliver_later
     end
 end
