@@ -125,13 +125,13 @@ class Api::V1::CertificatesController < ApplicationController
         <div class="header" style="text-align:center; margin-bottom:20px;">
             <!-- Logo -->
             <div>
-                <img src="file:///#{Rails.root.join('app/assets/images/zcrop3.png')}"
-                    alt="Z Corp Logo"
+                <img src="file:///#{Rails.root.join('app/assets/images/logo2.jpg')}"
+                    alt="Bytes Logo"
                     style="height:80px; width:auto; margin-bottom:10px;" />                
             </div>
             <!-- Contact Info -->
             <div style="font-size:10pt; line-height:1.4;">
-                <div>info@zcorp.space</div>
+                <div>info@bytesexchange.com</div>
                 <div>Unit 9G, One Corporate Place, Maple Grove, Antero Soriano Highway, General Trias,</div>
                 <div>Cavite 4107, Philippines</div>
             </div>
@@ -147,7 +147,7 @@ class Api::V1::CertificatesController < ApplicationController
         </div>
         <div class="section" >
             <div class="block-right">
-                <p><strong>Issued by: </strong><span class="bold">Bytes Exchange – Z Corp.</span></p>
+                <p><strong>Issued by: </strong><span class="bold">Bytes Exchange</span></p>
                 <p><strong>Date of Issuance:</strong> 
                 <span class="bold">#{@participant.issuance_date&.strftime("%d %B %Y") || Date.today.strftime("%d %B %Y")}</span>
                 </p>
@@ -156,7 +156,7 @@ class Api::V1::CertificatesController < ApplicationController
 
 
         <div class="content">
-            <p>This is to certify that <strong>#{@participant.name || "—"}</strong> (“Participant”) has provided a capital contribution to <strong>Bytes Exchange – Z Corp.</strong> under the following terms and conditions:</p>
+            <p>This is to certify that <strong>#{@participant.name || "—"}</strong> (“Participant”) has provided a capital contribution to <strong>Bytes Exchange</strong> under the following terms and conditions:</p>
 
             <div class="section" >
             <h3>1. Contribution</h3>
