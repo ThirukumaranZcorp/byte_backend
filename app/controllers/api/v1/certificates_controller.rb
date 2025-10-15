@@ -280,13 +280,25 @@ class Api::V1::CertificatesController < ApplicationController
         </html>
     HTML
 
-    pdf = WickedPdf.new.pdf_from_string(pdf_html)
+       pdf = WickedPdf.new.pdf_from_string(pdf_html)
 
-    send_data pdf,
-                filename: "certificate.pdf",
+        # Clean and safe filename (replace spaces, sanitize)
+        filename = "Bytes_Exchange_Certificate_#{@participant.name.to_s.strip.gsub(/[^a-zA-Z]/, '')}.pdf"
+
+        # filename = "Bytes_Exchange_Certificate_#{@participant.name.to_s.strip.gsub(/\s+/, '')}.pdf"
+
+        # Send data with explicit filename — use :filename option AND remove the UTF-8 encoded version
+        send_data pdf,
+                filename: filename,
                 type: "application/pdf",
-                disposition: "attachment"
+                disposition: "attachment",
+                status: 200
+
+        # Manually fix Rails’ extra UTF-8 header after send_data sets it
+        response.headers['Content-Disposition'] = "attachment; filename=\"#{filename}\""
+
     end
+
 
 
     private
