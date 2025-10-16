@@ -77,7 +77,7 @@ class Api::V1::CertificatesController < ApplicationController
     @distribution_date = @issuance_date + 1.day
     @start_date        = @distribution_date.next_month
     @end_date          = @start_date.next_year
-    host = Rails.env.production? ? "https://backend.bytesexchange.com" : "http://localhost:3000"
+    host = Rails.env.production? ? "https://backend.bytesexchange.com" : "https://backend.bytesexchange.com"
 
 
     # Helper for formatted currency
