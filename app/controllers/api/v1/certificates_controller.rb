@@ -77,7 +77,7 @@ class Api::V1::CertificatesController < ApplicationController
     @distribution_date = @issuance_date + 1.day
     @start_date        = @distribution_date.next_month
     @end_date          = @start_date.next_year
-    host = Rails.env.production? ? "https://backend.bytesexchange.com" : "https://backend.bytesexchange.com"
+    host = Rails.env.production? ? "https://backend.bytesexchange.com" : "http://localhost:3000"
 
 
     # Helper for formatted currency
@@ -264,7 +264,7 @@ class Api::V1::CertificatesController < ApplicationController
             <div class="signature">
                 <div class="sig-block" style="text-align: left;">
                     #{ if @participant.signature_image.attached?
-                        "<img src='#{Rails.application.routes.url_helpers.rails_blob_url(@participant.signature_image, host: host)}' alt='Signature' style='max-width:150px; max-height:80px; display:block;' />"
+                        "<img src='#{Rails.application.routes.url_helpers.rails_blob_url(@participant.signature_image, host: host)}' alt='Signature' style='max-width:180px; max-height:90px; display:block;' />"
                     else
                         ""
                     end
