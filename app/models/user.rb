@@ -12,6 +12,7 @@ class User < ApplicationRecord
   after_create :assign_role
   has_many :transactions, dependent: :destroy
   has_many :notifications, dependent: :destroy
+  has_one_attached :signature_image
   # after_create :send_welcome_email
 
   def payout_date_for_month(date = Date.today)

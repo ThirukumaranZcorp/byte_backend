@@ -1,6 +1,6 @@
 class UserMailer < ApplicationMailer
 
-    default from: "support@bytesexchange.com"
+    default from: "noreply@bytesexchange.com"
 
     def welcome_email(user)
         @user = user

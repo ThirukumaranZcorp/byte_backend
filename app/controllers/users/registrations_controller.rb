@@ -102,11 +102,56 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # end
 
 
+  # def create
+  #   build_resource(sign_up_params)
+
+  #   if resource.save
+  #     # Create notification for admin when new user registers
+  #     AdminNotification.create!(
+  #       title: "New User Registered",
+  #       message: "A new user '#{resource.name}' (#{resource.email}) has just registered on #{Time.current.strftime('%d %B %Y, %I:%M %p')}."
+  #     )
+
+  #     token = Warden::JWTAuth::UserEncoder.new.call(resource, :user, nil).first
+  #     render json: {
+  #       message: "User registered successfully",
+  #       user: resource,
+  #       token: token
+  #     }, status: :created
+  #   else
+  #     render json: {
+  #       message: "Registration failed",
+  #       errors: resource.errors.full_messages
+  #     }, status: :unprocessable_entity
+  #   end
+  # rescue ActiveRecord::RecordNotUnique
+  #   render json: {
+  #     message: "Registration failed",
+  #     errors: ["Email already exists"]
+  #   }, status: :unprocessable_entity
+  # end
+
+  include Rails.application.routes.url_helpers
+
   def create
-    build_resource(sign_up_params)
+    build_resource(sign_up_params.except(:signature_image))
+
+    # Attach signature image if present (Base64)
+    if params[:sign_up][:signature_image].present?
+      begin
+        decoded_data = Base64.decode64(params[:sign_up][:signature_image].split(',')[1])
+        io = StringIO.new(decoded_data)
+        resource.signature_image.attach(
+          io: io,
+          filename: "signature_#{Time.now.to_i}.png",
+          content_type: "image/png"
+        )
+      rescue => e
+        Rails.logger.error("Signature upload failed: #{e.message}")
+      end
+    end
 
     if resource.save
-      # Create notification for admin when new user registers
       AdminNotification.create!(
         title: "New User Registered",
         message: "A new user '#{resource.name}' (#{resource.email}) has just registered on #{Time.current.strftime('%d %B %Y, %I:%M %p')}."
@@ -115,7 +160,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
       token = Warden::JWTAuth::UserEncoder.new.call(resource, :user, nil).first
       render json: {
         message: "User registered successfully",
-        user: resource,
+        user: resource.as_json.merge(signature_url: resource.signature_image.attached? ? url_for(resource.signature_image) : nil),
         token: token
       }, status: :created
     else
@@ -198,7 +243,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
       :method, :bank_name_or_crypto_type, :account_name,
       :account_number_or_wallet, :swift_or_protocol,
       :terms_accepted, :risk_disclosure_accepted,
-      :renewal_fee_accepted, :typed_name, :date_signed
+      :renewal_fee_accepted, :typed_name, :date_signed, :signature_image
     ).tap do |whitelisted|
       whitelisted[:name] = whitelisted.delete(:fullName) if whitelisted[:fullName]
     end

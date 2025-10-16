@@ -88,17 +88,19 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :smtp
 
   config.action_mailer.smtp_settings = {
-    address: "smtp.gmail.com",
-    port: 587,
-    domain: 'gmail.com',
-    user_name: 'zcorp186@gmail.com',
-    password: 'dxwywrwqhankxjpt' ,
-    authentication: "plain",
+    address: "mail.bytesexchange.com",   # Bluehost SMTP server
+    port: 465,                           # Use 465 for SSL, 587 for TLS
+    domain: "bytesexchange.com",
+    user_name: "noreply@bytesexchange.com",
+    password: "Byte@343234576",         # your email password or app password
+    authentication: :login,             # or :plain, depends on Bluehost
+    ssl: true,                           # use ssl for port 465
+    tls: false,
     enable_starttls_auto: true
   }
 
   config.action_mailer.raise_delivery_errors = true
-
-  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+  # config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+  config.action_mailer.default_url_options = { host: 'backend.bytesexchange.com', protocol: 'https' }
   
 end

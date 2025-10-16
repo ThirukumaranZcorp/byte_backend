@@ -77,6 +77,7 @@ class Api::V1::CertificatesController < ApplicationController
     @distribution_date = @issuance_date + 1.day
     @start_date        = @distribution_date.next_month
     @end_date          = @start_date.next_year
+    host = Rails.env.production? ? "https://backend.bytesexchange.com" : "https://backend.bytesexchange.com"
 
 
     # Helper for formatted currency
@@ -261,13 +262,24 @@ class Api::V1::CertificatesController < ApplicationController
             <p class="muted">By signing below, the Participant acknowledges and accepts the terms of this Profit Sharing Certificate.</p>
 
             <div class="signature">
-                <div class="sig-block">
+                <div class="sig-block" style="text-align: left;">
+                    #{ if @participant.signature_image.attached?
+                        "<img src='#{Rails.application.routes.url_helpers.rails_blob_url(@participant.signature_image, host: host)}' alt='Signature' style='max-width:150px; max-height:80px; display:block;' />"
+                    else
+                        ""
+                    end
+                    }
+
                     <div class="bold">For Participant</div>
                     <div>Name: <strong>#{@participant.name || "—"}</strong></div>
                     <div>Date: #{@participant.date_signed&.strftime("%d %B %Y") || "—"}</div>
                 </div>
             </div>
+
+        
             </div>
+
+
 
             <div class="footer">
                 <div>
