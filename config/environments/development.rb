@@ -79,6 +79,22 @@ Rails.application.configure do
     enable_starttls_auto: true
   }
 
+
+  # config.action_mailer.delivery_method = :smtp
+
+  # config.action_mailer.smtp_settings = {
+  #   address: "mail.bytesexchange.com",
+  #   port: 587,
+  #   domain: "bytesexchange.com",
+  #   user_name: "noreply@bytesexchange.com",
+  #   password: "Byte@343234576",
+  #   authentication: :login,
+  #   ssl: false,
+  #   tls: true,
+  #   enable_starttls_auto: true
+  # }
+
+
   config.action_mailer.raise_delivery_errors = true
   # config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
   config.action_mailer.default_url_options = { host: 'backend.bytesexchange.com', protocol: 'https' }
