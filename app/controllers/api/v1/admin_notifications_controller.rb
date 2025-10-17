@@ -19,6 +19,16 @@ class Api::V1::AdminNotificationsController < ApplicationController
     end
   end
 
+  def update_contribution_amount
+    user = User.find(params[:id])
+    if user.update(contribution_amount: params[:capital])
+      render json: { message: "Payout day updated successfully", capital: user.contribution_amount }
+    else
+      render json: { error: "Failed to update payout day" }, status: :unprocessable_entity
+    end
+
+  end
+
   
 
 end

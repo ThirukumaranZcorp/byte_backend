@@ -52,6 +52,8 @@ Rails.application.routes.draw do
 
       post 'change_trader_max' , to: 'profiles#change_trader_max'
 
+      
+
 
       resources :notifications, only: [:index, :create] do
         member do
@@ -63,6 +65,7 @@ Rails.application.routes.draw do
         member do
           patch :read, to: 'admin_notifications#mark_as_read'
           patch :update_payout_day, to: 'admin_notifications#upcoming_payouts'
+          patch :update_contribution_amount 
         end
       end
 
