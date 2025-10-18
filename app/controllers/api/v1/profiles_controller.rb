@@ -15,22 +15,33 @@ class Api::V1::ProfilesController < ApplicationController
   end
 
   def get_change_trader_fee
-    dashboard = Dashbord.find(1)
+    dashboard = Dashbord.find_by(user_id: current_user.id)
+    puts dashboard.inspect
     render json: dashboard
   end
+
+  def get_change_trader_fee_admin
+    puts "--------------------------------------------------"
+    puts params[:userId].inspect
+    dashboard = Dashbord.find_by(user_id: params[:userId])
+    puts dashboard.inspect
+    render json: dashboard
+  end
+
 
   def change_the_fees
     fee = params[:fee].to_f
     puts "Fee param: #{fee}"
 
-    dashboard = Dashbord.find(1) # or Dashbord if that's your actual model
-    puts "----------------ddd------------"
-    puts dashboard.inspect
+
+    puts params[:userId].inspect
+    dashboard = Dashbord.find_by(user_id: params[:userId])
     if dashboard.update(fee: fee)
-      render json: { status: "success", fee: dashboard.fee }
+      render json: { status: "success", data: dashboard }
     else
       render json: { status: "error", errors: dashboard.errors.full_messages }, status: :unprocessable_entity
     end
+
   end
 
 
@@ -40,11 +51,12 @@ class Api::V1::ProfilesController < ApplicationController
 
     puts "Fee param: -------  #{max}"
 
-    dashboard = Dashbord.find(1) # or Dashbord if that's your actual model
+    puts params[:userId].inspect
+    dashboard = Dashbord.find_by(user_id: params[:userId])
     puts "----------------ddd------------"
     puts dashboard.inspect
     if dashboard.update(max: max)
-      render json: { status: "success", max: dashboard.max }
+      render json: { status: "success", data: dashboard }
     else
       render json: { status: "error", errors: dashboard.errors.full_messages }, status: :unprocessable_entity
     end
@@ -55,12 +67,12 @@ class Api::V1::ProfilesController < ApplicationController
     min = params[:min]
 
     puts "Fee param: ------------- #{min}"
-
-    dashboard = Dashbord.find(1) # or Dashbord if that's your actual model
+    puts params[:userId].inspect
+    dashboard = Dashbord.find_by(user_id: params[:userId])
     puts "----------------ddd------------"
     puts dashboard.inspect
     if dashboard.update(min: min)
-      render json: { status: "success", min: dashboard.min }
+      render json: { status: "success", data: dashboard }
     else
       render json: { status: "error", errors: dashboard.errors.full_messages }, status: :unprocessable_entity
     end

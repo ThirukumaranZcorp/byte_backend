@@ -180,9 +180,32 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
 
 
+  # def change_password
+  #   user = current_user
+  #   # Use valid_password? instead of authenticate
+  #   if user.valid_password?(params[:current_password])
+  #     if params[:new_password].present?
+  #       user.password = params[:new_password]
+  #       if user.save
+  #         render json: { message: "Password changed successfully" }, status: :ok
+  #       else
+  #         render json: { error: user.errors.full_messages }, status: :unprocessable_entity
+  #       end
+  #     else
+  #       render json: { error: "New password cannot be blank" }, status: :unprocessable_entity
+  #     end
+  #   else
+  #     render json: { error: "Current password is incorrect" }, status: :unauthorized
+  #   end
+  # end
+
   def change_password
     user = current_user
-    # Use valid_password? instead of authenticate
+
+    unless user
+      render json: { error: "Unauthorized: invalid or missing token" }, status: :unauthorized and return
+    end
+
     if user.valid_password?(params[:current_password])
       if params[:new_password].present?
         user.password = params[:new_password]
@@ -195,7 +218,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
         render json: { error: "New password cannot be blank" }, status: :unprocessable_entity
       end
     else
-      render json: { error: "Current password is incorrect" }, status: :unauthorized
+      render json: { error: "Current password is incorrect" }, status: :unprocessable_entity
     end
   end
 

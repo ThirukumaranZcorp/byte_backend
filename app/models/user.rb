@@ -10,6 +10,8 @@ class User < ApplicationRecord
          jwt_revocation_strategy: Devise::JWT::RevocationStrategies::Null
          
   after_create :assign_role
+
+  has_one :dashbords
   has_many :transactions, dependent: :destroy
   has_many :notifications, dependent: :destroy
   has_one_attached :signature_image
@@ -38,6 +40,13 @@ class User < ApplicationRecord
       newday = self.issuance_date + 1.day
       # Update payout_day correctly
       update_column(:payout_day, newday.day)
+      # Create or find Dashbord record for this user
+      Dashbord.find_or_create_by!(
+        fee: 3.0,
+        min: 3.0,
+        max: 5.0,
+        user_id: self.id
+      )
     end
 
     def send_welcome_email

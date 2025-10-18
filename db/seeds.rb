@@ -14,5 +14,14 @@
 #     user.name = "byteAdmin"
 # end
 
-# Dashbord.find_or_create_by!(fee: 3)
-Dashbord.find_or_create_by!(fee: 3.0)
+# Dashbord.find_or_create_by!(fee: 3.0 , min: 3.0 ,max: 5.0, users_id: 2)
+# Dashbord.find_or_create_by!(fee: 3.0)
+
+User.find_each do |user|
+  Dashbord.find_or_create_by!(user_id: user.id) do |dashboard|
+    dashboard.fee = 3.0
+    dashboard.min = 3.0
+    dashboard.max = 5.0
+  end
+end
+
