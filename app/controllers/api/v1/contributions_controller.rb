@@ -115,6 +115,7 @@ class Api::V1::ContributionsController < ApplicationController
       status: contribution.status,
       name: contribution.user.name,
       user_id: contribution.user_id,
+      deposit_type: contribution.deposit_type,
       user_email: contribution.user.email, 
       current_contribt: contribution.user.contribution_amount,
       receipt_url: contribution.receipt.attached? ? url_for(contribution.receipt) : nil,
