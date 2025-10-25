@@ -14,6 +14,7 @@ class User < ApplicationRecord
   has_one :dashbords
   has_many :transactions, dependent: :destroy
   has_many :notifications, dependent: :destroy
+  has_many :contributions, dependent: :destroy
   has_one_attached :signature_image
   after_commit :send_welcome_email, on: :create
 

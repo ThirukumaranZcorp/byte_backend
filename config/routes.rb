@@ -53,7 +53,15 @@ Rails.application.routes.draw do
       post 'change_trader_min' , to: 'profiles#change_trader_min'
 
       post 'change_trader_max' , to: 'profiles#change_trader_max'
+      
+      # resources :contributions, only: [:index, :create]
 
+      resources :contributions, only: [:index, :create] do
+        member do
+          put :approve
+          put :reject
+        end
+      end
       
 
 
