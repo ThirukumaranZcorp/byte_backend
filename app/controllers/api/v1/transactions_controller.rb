@@ -84,7 +84,8 @@ class Api::V1::TransactionsController < ApplicationController
         status: row["Status"],
         month_count: month_count,
         airdrop_amount: row["Airdrop Amount"], # Manual from file
-        profit_amount: row["Profit Amount"]
+        profit_amount: row["Profit Amount"],
+        currency: row["Currency"]
         }
 
         if existing
