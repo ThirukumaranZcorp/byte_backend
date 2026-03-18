@@ -81,5 +81,9 @@ Rails.application.routes.draw do
 
     end
   end
-
+  namespace :api do
+    namespace :v1 do
+      delete '/users/:id', to: 'users#destroy'
+    end
+  end
 end
