@@ -11,7 +11,7 @@ class User < ApplicationRecord
          
   after_create :assign_role
 
-  has_one :dashbords
+  has_one :dashbord, dependent: :destroy
   has_many :transactions, dependent: :destroy
   has_many :notifications, dependent: :destroy
   has_many :contributions, dependent: :destroy
