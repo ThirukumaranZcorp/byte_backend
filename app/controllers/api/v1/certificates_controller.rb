@@ -81,10 +81,18 @@ class Api::V1::CertificatesController < ApplicationController
 
 
     # Helper for formatted currency
-    def format_currency(amount, currency = "GBP")
-        symbol = currency == "GBP" ? "£" : "#{currency} "
-        sprintf("#{symbol}%.2f", amount.to_f)
-    end
+		def format_currency(amount, currency = "GBP")
+			symbols = {
+				"GBP" => "£",
+				"USD" => "$",
+				"EUR" => "€",
+				"INR" => "₹"
+			}
+
+			symbol = symbols[currency.to_s.upcase] || currency.to_s.upcase
+
+			"#{symbol}#{amount.to_f.round(2).to_fs(:delimited, delimiter: ",")}"
+		end
 
     pdf_html = <<-HTML
         <!doctype html>
@@ -135,6 +143,7 @@ class Api::V1::CertificatesController < ApplicationController
                 <div>info@bytesexchange.com</div>
                 <div>Unit 9G, One Corporate Place, Maple Grove, Antero Soriano Highway, General Trias,</div>
                 <div>Cavite 4107, Philippines</div>
+                <div> Plot no 46, Shankar vihar, Gurgaon,HR, India</div>
             </div>
 
             <!-- Divider Line -->
@@ -227,7 +236,7 @@ class Api::V1::CertificatesController < ApplicationController
 
            <div class="section" style="margin-top:65px;">
             <h3>7. Currency Conversion & Settlement</h3>
-            <p>All profit share payments and the return of Contribution shall be calculated in<strong> Pounds Sterling (GBP).</strong></p>
+            <p>All profit share payments and the return of Contribution shall be calculated in<strong> Pounds Sterling (USD).</strong></p>
             
             <ul>
                 <li><strong>Conversion Basis:</strong> The GBP-denominated amount due shall be converted into the receiving currency based on the prevailing <strong>GBP exchange rate published on OKX</strong> (https://www.okx.com/) at the time of transfer.</li>
