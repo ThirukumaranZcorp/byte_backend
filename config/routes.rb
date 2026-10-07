@@ -29,6 +29,8 @@ Rails.application.routes.draw do
   # root "posts#index"
   namespace :api do
     namespace :v1 do
+      post "users/forgot_password", to: "users#forgot_password"
+      post "users/change_password", to: "users#change_password"
       # resources :payment_details, only: [:create, :index, :show]
       # resource :certificate, only: [:show]
       # resources :certificates, only: [:show]
